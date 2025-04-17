@@ -23,6 +23,32 @@
         loop(); // Функция, которая запускает главный анимационный цикл. Без неё ничего происходить не будет
     }
 
+    const drawWand = () => {
+        positions.wandX = (width * 0.91) - image.width;
+        positions.wandY = (height * 0.93) - image.height;
+
+        const rotationInRadians = Math.atan2(positions.mouseY - positions.wandY, positions.mouseX - positions.wandX) - Math.PI;
+        const rotationInDegrees = (rotationInRadians * 180 / Math.PI) + 360;
+
+        context.clearRect(0, 0, width, height);
+
+        // Сохраняем контекст для последующего удаления преобразований
+        context.save();
+        context.translate(positions.wandX, positions.wandY);
+
+        if (rotationInDegrees > 0 && rotationInDegrees < 90) {
+            context.rotate(rotationInDegrees * Math.PI / 180); // Необходимо преобразовать обратно в радианы
+        } else if (rotationInDegrees > 90 && rotationInDegrees < 275) {
+            context.rotate(90 * Math.PI / 180); // Поворот на 90 градусов, если курсор выходит за пределы 90 градусов
+        }
+
+        context.drawImage(image, -image.width, -image.height / 2); // Необходимо расположить якорь в правой средней части изображения
+
+        // Можно нарисовать обводку вокруг текста, чтобы увидеть где находятся края
+        // context.strokeRect(0, 0, width, height);
+        context.restore(;)
+    };
+
     const attachEventListeners = () => { // Эта строка говорит: "Если мышка двигается по канвасу — запоминай, где она сейчас."
         canvas.addEventListener('mousemove', e => {
             positions.mouseX = e.pageX;
