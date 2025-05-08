@@ -46,7 +46,7 @@
 
         // Можно нарисовать обводку вокруг текста, чтобы увидеть где находятся края
         // context.strokeRect(0, 0, width, height);
-        context.restore(;)
+        context.restore();
     };
 
     const attachEventListeners = () => { // Эта строка говорит: "Если мышка двигается по канвасу — запоминай, где она сейчас."
