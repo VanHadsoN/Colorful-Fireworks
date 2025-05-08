@@ -12,7 +12,22 @@
         wandY: 0
     };
 
+    const fireworks = [];
+    const particles = [];
+    const numberOfParticles = 50; // производительность будет снижаться с увеличением числа частиц выше 50
+
+    const random = (min, max) => Math.random() * (max - min) + min;
+
+    const getDistance = (x1, y1, x2, y2) => {
+        const xDistance = x1 - x2;
+        const yDistance = y1 - y2;
+
+        return Math.sqrt(Math.pow(xDistance, 2) + Math.pow(yDistance, 2));
+    };
+
     const image = new Image(); // Создаётся объект изобажения
+
+    let mouseClicked = false;
 
     canvas.width = width; // Делаем канвас по размеру экрана
     canvas.height = height; // Растягиваем его полностью
@@ -54,6 +69,9 @@
             positions.mouseX = e.pageX;
             positions.mouseY = e.pageY;
         });
+
+        canvas.addEventListener('mousedown', () => mouseClicked = true);
+        canvas.addEventListener('mouseup', () => mouseClicked = false);
     };
 
     const loop = () => {
