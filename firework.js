@@ -78,4 +78,71 @@
         requestAnimationFrame(loop);
         drawWand();
     };
+
+    function Firework() {
+        const init = () => {
+            let fireworkLength = 10;
+
+            // текущие координаты
+            this.x = positions.wandX;
+            this.y = positions.wandY;
+
+            // координаты цели
+            this.tx = positions.mouseX;
+            this.ty = positions.mouseY;
+
+            // расстояние со стартовой точки до цели
+            this.distanceToTarget = getDistance(positions.wandX, positions.wandY, this.tx, this.ty);
+            this.distanceTraveled = 0;
+
+            this.coordinates = [];
+            this.angle = Math.atan2(this.ty - positions.wandY, this.tx - positions.wandX);
+            this.speed = 20;
+            this.friction = 0.99; // снижаем скорость на 1% каждый кадр
+            this.hue = random(0, 360); // случайный оттенок (обозначенный как hue) задаваемый для следа
+
+            while (fireworkLength--) {
+                this.coordinates.push([this.x, this.y]);
+            }
+        };
+
+        this.animate = index => {
+            this.coordinates.pop();
+            this.coordinates.unshift([this.x, this.y]);
+
+            this.speed *= this.friction;
+
+            let vx = Math.cos(this.angle) * this.speed;
+            let vy = Math.sin(this.angle) * this.speed;
+
+            this.distanceTraveled = getDistance(positions.wandX, positions.wandY, this.x + vx, this.y + vy);
+
+            if(this.distanceTraveled >= this.distanceToTarget) {
+                let i = numberOfParticles;
+
+                while(i--) {
+                    particles.push(new Particle(this.tx, this.ty));
+                }
+
+                fireworks.splice(index, 1)
+            } else {
+                this.x += vx;
+                this.y += vy;
+            }
+        }
+
+        this.draw = index => {
+            context.beginPath();
+            context.moveTo(this.coordinates[this.coordinates.length - 1][0],
+                           this.coordinates[this.coordinates.length - 1][1]);
+            context.lineTo(this.x, this.y);
+
+            context.strokeStyle = `hsl(${this.hue}, 100%, 50%)`;
+            context.stroke();
+
+            this.animate(index);
+        }
+
+        init();
+    }
 })();
