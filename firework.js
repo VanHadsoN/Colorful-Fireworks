@@ -74,9 +74,18 @@
         canvas.addEventListener('mouseup', () => mouseClicked = false); // Срабатывает, когда кнопку мыши отпускают
     };
 
-    const loop = () => {
-        requestAnimationFrame(loop);
-        drawWand();
+    const loop = () => { // это основной цикл, он же цикл отрисовки, эта функция будет выполняться каждый кадр, пока открыта страница
+        requestAnimationFrame(loop); // эта функция вызывает loop снова и снова синхронизируясь с частотой обновления экрана (т.е. это рекурсия с turbo mode без пергрузки процессора)
+        drawWand(); // это отрисовка палочки
+
+        if(mouseClicked) { // если пользователь нажал на мышь
+            fireworks.push(new Firework()); // создаём новый феерверк, пушим его в массив fireworks
+        }
+
+        let fireworkIndex = fireworks.length;
+        while(fireworkIndex--) { // цикл перербирает все феерверки, начиная с конца массива
+            fireworks[fireworkIndex].draw(fireworkIndex); // метод делает 2 вещи: рисует феерверк и его шлейф; анимирует его движение и проверяет взорвался ли он
+        }
     };
 
     function Firework() {
@@ -145,6 +154,12 @@
 
             this.animate(index); // После того как фейерверк отрисован — вызывается метод animate, который обновляет его позицию, скорость и запускает взрыв, если нужно
         }
+
+        init();
+    }
+
+    function Particle(x, y) {
+        const init = () => {};
 
         init();
     }
