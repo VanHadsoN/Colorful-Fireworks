@@ -86,6 +86,11 @@
         while(fireworkIndex--) { // цикл перербирает все феерверки, начиная с конца массива
             fireworks[fireworkIndex].draw(fireworkIndex); // метод делает 2 вещи: рисует феерверк и его шлейф; анимирует его движение и проверяет взорвался ли он
         }
+
+        let particleIndex = particles.length;
+        while(particleIndex--) {
+            particles[particleIndex].draw(particleIndex);
+        }
     };
 
     function Firework() {
@@ -159,7 +164,56 @@
     }
 
     function Particle(x, y) {
-        const init = () => {};
+        const init = () => {
+            let particleLength = 7;
+
+            this.x = x;
+            this.y = y;
+
+            this.coordinates = [];
+
+            this.angle = random(0, Math.PI * 2);
+            this.speed = random(1, 10);
+
+            this.friction = 0.95;
+            this.gravity = 2;
+
+            this.hue = random(0, 360);
+            this.alpha = 1;
+            this.decay = random(0.015, 0.03);
+
+            while(this.coordinateCount--) {
+                thsi.coordinates.push([this.x, this.y]);
+            }
+        };
+
+        this.animate = index => {
+            this.coordinates.pop();
+            this.coordinates.unshift([this.x, this.y]);
+
+            this.speed *= this.friction;
+
+            this.x += Math.cos(this.angle) * this.speed;
+            this.y += Math.sin(this.angle) * this.speed + this.gravity;
+
+            this.alpha -= this.decay;
+
+            if (this.alpha <= this.decay) {
+                particles.splice(index, 1);
+            }
+        }
+
+        this.draw = index => {
+            context.beginPath();
+            context.moveTo(this.coordinates[this.coordinates.length - 1][0],
+                           this.coordinates[this.coordinates.length - 1][1]);
+            context.lineTo(this.x, this.y);
+
+            context.strokeStyle = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`;
+            context.stroke();
+
+            this.animate(index);
+        }
 
         init();
     }
