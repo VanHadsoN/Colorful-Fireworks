@@ -39,8 +39,8 @@
     }
 
     const drawWand = () => {
-        positions.wandX = (width * 0.91) - image.width;
-        positions.wandY = (height * 0.93) - image.height;
+        positions.wandX = (width * 0.905) - image.width;
+        positions.wandY = (height * 0.935) - image.height;
 
         const rotationInRadians = Math.atan2(positions.mouseY - positions.wandY, positions.mouseX - positions.wandX) - Math.PI;
         const rotationInDegrees = (rotationInRadians * 180 / Math.PI) + 360;
@@ -182,8 +182,8 @@
             this.alpha = 1;
             this.decay = random(0.015, 0.03);
 
-            while(this.coordinateCount--) {
-                thsi.coordinates.push([this.x, this.y]);
+            while(particleLength--) {
+                this.coordinates.push([this.x, this.y]);
             }
         };
 
