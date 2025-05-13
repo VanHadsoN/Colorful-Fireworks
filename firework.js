@@ -163,56 +163,56 @@
         init();
     }
 
-    function Particle(x, y) {
-        const init = () => {
-            let particleLength = 7;
+    function Particle(x, y) { // функция-конструктор частиц
+        const init = () => { // настраивает параметры конкретной частицы
+            let particleLength = 7; // искра оставит след из 7 точек, это её хвост
 
-            this.x = x;
+            this.x = x; // начальное положение - прямо в точке где взорвался феерверк
             this.y = y;
 
-            this.coordinates = [];
+            this.coordinates = []; // массив нужен для хранения истории предыдущих координат
 
-            this.angle = random(0, Math.PI * 2);
-            this.speed = random(1, 10);
+            this.angle = random(0, Math.PI * 2); // искра получает случайный угол направления - от 0 до 360 градусов (в радианах)
+            this.speed = random(1, 10); // каждая искра двигается с разной скоростью
 
-            this.friction = 0.95;
-            this.gravity = 2;
+            this.friction = 0.95; // скорость искры будет снижаться со временем (замедляется каждый кадр на 5%)
+            this.gravity = 2; // каждая искра будет падать вниз будто бы под действием гравитации
 
-            this.hue = random(0, 360);
-            this.alpha = 1;
-            this.decay = random(0.015, 0.03);
+            this.hue = random(0, 360); // цвет каждой искры случайный
+            this.alpha = 1; // полная непрозрачность
+            this.decay = random(0.015, 0.03); // регулирует насколько быстро частица становится прозрачной (и исчезает)
 
             while(particleLength--) {
-                this.coordinates.push([this.x, this.y]);
+                this.coordinates.push([this.x, this.y]); // создаёт массив из одинаковых координат [x, y] - это стартовые точки для хвоста искры
             }
         };
 
-        this.animate = index => {
-            this.coordinates.pop();
-            this.coordinates.unshift([this.x, this.y]);
+        this.animate = index => { // это изненный путь искры - один кадр жизни частицы
+            this.coordinates.pop(); // удаляет самую старую координату из массива хвоста (coordinates), чтобы он не рос вечно
+            this.coordinates.unshift([this.x, this.y]); // добавляет текущие координаты в начало массива
 
-            this.speed *= this.friction;
+            this.speed *= this.friction; // частица замедляется каждый кадр на 5% (если friction = 0.95)
 
-            this.x += Math.cos(this.angle) * this.speed;
-            this.y += Math.sin(this.angle) * this.speed + this.gravity;
+            this.x += Math.cos(this.angle) * this.speed; // движение частицы по оси x
+            this.y += Math.sin(this.angle) * this.speed + this.gravity; // движение частицы по оси y + падние вниз со временем
 
-            this.alpha -= this.decay;
+            this.alpha -= this.decay; // частица становится всё более прозрачной с каждым кадром (alpha — это её "прозрачность" (1 = полностью видима, 0 = полностью исчезла))
 
-            if (this.alpha <= this.decay) {
-                particles.splice(index, 1);
+            if (this.alpha <= this.decay) { // когда alpha становится слишком маленьким (почти 0) - частица считается мертвой
+                particles.splice(index, 1); // частица удаляется из массива particles
             }
         }
 
-        this.draw = index => {
-            context.beginPath();
+        this.draw = index => { // то как частица рисуется на холсте (canvas)
+            context.beginPath(); // начало отрисовки нового пути
             context.moveTo(this.coordinates[this.coordinates.length - 1][0],
-                           this.coordinates[this.coordinates.length - 1][1]);
-            context.lineTo(this.x, this.y);
+                           this.coordinates[this.coordinates.length - 1][1]); // рисуется линия от старой позиции
+            context.lineTo(this.x, this.y); // рисуется линия к текущей позиции
 
-            context.strokeStyle = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`;
-            context.stroke();
+            context.strokeStyle = `hsla(${this.hue}, 100%, 50%, ${this.alpha})`; // задаётся цвет линии (оттенок, насыщенность, светлота, прозрачность)
+            context.stroke(); // сам процесс отрисовки подготовленной линии на канвасе
 
-            this.animate(index);
+            this.animate(index); // анимирует частицу: меняет её координаты, прозрачность, скорость и убивает частицу, если она уже угасла (alpha становится слишком маленьким)
         }
 
         init();
