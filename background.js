@@ -5,7 +5,7 @@
     const width = window.innerWidth; // Получаем ширину текущего окна браузера
     const height = window.innerHeight; //  Получаем высоту текущего окна браузера
 
-    const numberOfStars = 50;
+    const numberOfStars = 50; // задаем количество звёзд на небе
     const random = (min, max) => Math.random() * (max - min) + min; // функция random возвращает случайное число в заданном диапазоне [min, max) каждый раз при вызове
 
     // устанавливаем canvas по ширине, высоте окна браузера
@@ -35,7 +35,7 @@
         const image = new Image(); // Создаётся новый объект Image
         image.src = './assets/wizard.png'; // Задаётся путь к файлу картинки
 
-        image.onload = function () { // Как только картинка волшеника загрузится, выполнится эта функция
+        image.onload = function () { // Как только картинка волшебника загрузится, выполнится эта функция
             /*
             * this - ссылается на объект изображения
             * рисуем на 90% ширины холста - ширину изображения
