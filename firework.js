@@ -39,8 +39,8 @@
     }
 
     const drawWand = () => {
-        positions.wandX = (width * 0.905) - image.width;
-        positions.wandY = (height * 0.935) - image.height;
+        positions.wandX = (width * 0.110) - image.width;
+        positions.wandY = (height * 0.915) - image.height;
 
         const rotationInRadians = Math.atan2(positions.mouseY - positions.wandY, positions.mouseX - positions.wandX) - Math.PI;
         const rotationInDegrees = (rotationInRadians * 180 / Math.PI) + 360;
