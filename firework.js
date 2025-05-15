@@ -40,7 +40,7 @@
 
     const drawWand = () => {
         positions.wandX = (width * 0.110) - image.width;
-        positions.wandY = (height * 0.915) - image.height;
+        positions.wandY = (height * 0.911) - image.height;
 
         const rotationInRadians = Math.atan2(positions.mouseY - positions.wandY, positions.mouseX - positions.wandX) - Math.PI;
         const rotationInDegrees = (rotationInRadians * 180 / Math.PI) + 360;
@@ -51,9 +51,9 @@
         context.save();
         context.translate(positions.wandX, positions.wandY);
 
-        if (rotationInDegrees > 0 && rotationInDegrees < 90) {
+        if (rotationInDegrees > 90 && rotationInDegrees < 260) {
             context.rotate(rotationInDegrees * Math.PI / 180); // Необходимо преобразовать обратно в радианы
-        } else if (rotationInDegrees > 90 && rotationInDegrees < 275) {
+        } else if (rotationInDegrees > 0 && rotationInDegrees < 90) {
             context.rotate(90 * Math.PI / 180); // Поворот на 90 градусов, если курсор выходит за пределы 90 градусов
         }
 
